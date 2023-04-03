@@ -2,7 +2,6 @@
 let ElementosLi = []
 
 function elementoNuevo() {
-  console.log(Date.now() / 1000)
   var li = document.createElement("li");
   var inputValue = document.getElementById("Ingreso").value;
   var t = document.createTextNode(inputValue);
@@ -12,6 +11,8 @@ function elementoNuevo() {
     alert("You must write something!");
   } else {
     document.getElementById("uwu").appendChild(li);
+    var x = document.createElement("INPUT");
+    x.setAttribute("type", "checkbox");
   }
   document.getElementById("Ingreso").value = "";
 
@@ -21,29 +22,31 @@ function elementoNuevo() {
   span.appendChild(txt);
   li.appendChild(span);
 
+  var close = document.getElementsByClassName("close");
+  var i;
   for (i = 0; i < close.length; i++) {
     close[i].onclick = function () {
       var div = this.parentElement;
       div.style.display = "none";
     }
   }
-}
+  var list = document.querySelector('ul');
+  list.addEventListener('click', function (ev) {
+    if (ev.target.tagName === 'LI') {
+      ev.target.classList.toggle('checked');
 
-document.getElementById("Ingreso1")
-    .addEventListener("keyup", function(e) {
-        if (e.code === 'Enter') {
-            document.getElementById("Ingreso").click();
-        }
-    });
+    }
+  }, false);
+  
+}
 
 function AgregarAlArray(Contenido) {
-
-  var NewElement = new Object()
-  NewElement.Contenido = Contenido
-  NewElement.FechaCreacion = Date.now()
-  NewElement.FechaTerminado = Date.now()
-  NewElement.Terminado = false
-
-  ElementosLi.push(NewElement)  
-  console.log(NewElement.Terminado)
-}
+  
+    var NewElement = new Object()
+    NewElement.Contenido = Contenido
+    NewElement.FechaCreacion = Date.now()
+    NewElement.FechaTerminado = Date.now()
+    NewElement.Terminado = false
+    ElementosLi.push(NewElement)
+    console.log(NewElement.FechaTerminado)
+  }
