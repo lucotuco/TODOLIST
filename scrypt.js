@@ -2,17 +2,19 @@
 let ElementosLi = []
 
 function elementoNuevo() {
-  var li = document.createElement("li");
+  var li = document.createElement("li");    
+  var x = document.createElement("INPUT");
+  x.setAttribute("type", "checkbox");
   var inputValue = document.getElementById("Ingreso").value;
   var t = document.createTextNode(inputValue);
+  li.appendChild(x)
   li.appendChild(t);
   AgregarAlArray(inputValue)
   if (inputValue === '') {
     alert("You must write something!");
   } else {
     document.getElementById("uwu").appendChild(li);
-    var x = document.createElement("INPUT");
-    x.setAttribute("type", "checkbox");
+
   }
   document.getElementById("Ingreso").value = "";
 
