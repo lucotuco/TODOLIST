@@ -1,61 +1,83 @@
-
+var Elementos=0
 let ElementosLi = []
 
-function elementoNuevo() {
-  var li = document.createElement("li");    
-  var inputValue = document.getElementById("Ingreso").value;
-  var t = document.createTextNode(inputValue);
-  li.appendChild(t);
-  AgregarAlArray(inputValue)
-  if (inputValue === '') {
-    alert("Escriba Algo");
-  } else {
-    document.getElementById("uwu").appendChild(li);
 
-  }
-  document.getElementById("Ingreso").value = "";
+const elementoNuevo = (clear = true) => {
+  if (!document.getElementById("Ingreso").value) return
 
-  var span = document.createElement("SPAN");
-  var txt = document.createTextNode("\u00D7");
-  span.className = "close";
-  span.appendChild(txt);
-  li.appendChild(span);
+  let currentdate = new Date();
+  let datetime = currentdate.getHours() + ":"  + currentdate.getMinutes() + ":" + currentdate.getSeconds()
+  document.getElementById("uwu").innerHTML += `
+  <li class="list-group-item element" id="uwu-${Elementos}">
+      <div class="content">
+          <input class="form-check-input me-1" type="checkbox" value="" id="check-${Elementos}" onchange="completado(${Elementos})">
+          <label class="form-check-label Elementos" id="Ingreso-${Elementos}" for="firstCheckbox">${document.getElementById("Ingreso").value}</label>
+      </div>
+      <div class="content gap"> Hora: ${datetime} <span id="fecha-${Elementos}"></span>
+      <button type="button" class="btn btn-danger" onclick="eliminar(${Elementos})">Borrar</button>
+      </div>
+  </li>
+  `
+  
+  ElementosLi.push({
+    id: Elementos,
+    Ingreso: document.getElementById("Ingreso").value,
+    fechaInicio: currentdate,
+    fechaFin: -1
+  })
 
-  var close = document.getElementsByClassName("close");
-  var i;
-  for (i = 0; i < close.length; i++) {
-    close[i].onclick = function () {
-      var div = this.parentElement;
-      div.style.display = "none";
-    }
-  }
+  if(clear) document.getElementById("Ingreso").value = ""
+  
+  Elementos++
 
-  var list = document.querySelector('ul');
-  list.addEventListener('click', function (ev) {
-    if (ev.target.tagName === 'LI') {
-      ev.target.classList.toggle('checked');
-      var Terminado =Date.now()
-    }
-  }, false);
 }
 
-function tareaMasRapida(){
+const eliminar = id => {
+  document.getElementById(`uwu-${id}`).remove()
+  ElementosLi[id].fechaInicio = -1
+}
+
+const completado = id => {
+  if (document.getElementById(`fecha-${id}`).innerHTML) return
+  let currentdate = new Date();
+  let datetime = currentdate.getHours() + ":"  + currentdate.getMinutes() + ":" + currentdate.getSeconds()
+  
+  document.getElementById(`fecha-${id}`).innerHTML = `Completo: ${datetime}`
+  document.getElementById(`check-${id}`).setAttribute("disabled", true)
+
+  ElementosLi[id].fechaFin = currentdate
+}
+
+const tareaMasRapida = () => {
+
+  const completadas = document.getElementsByClassName("tareaMasRapida")
+  for(let Ingreso of completadas) {
+      Ingreso.classList.remove("tareaMasRapida")
+  }
+
+  let tareaMasRapida = new Date()
+  tareaMasRapida = 0
+  console.log(tareaMasRapida)
+  let idMasRapida = 0
   for (let i = 0; i < ElementosLi.length; i++) {
-    const element = ElementosLi[i];
-    console.log(element.FechaTerminado)
+      if(ElementosLi[i].fechaFin != -1 && ElementosLi[i].fechaInicio != -1){
+          console.log("fecha inicio: " + ElementosLi[i].fechaInicio.getTime())
+          console.log("fecha fin: " + ElementosLi[i].fechaFin.getTime())
+          console.log("fecha fin - fecha inicio: " + (ElementosLi[i].fechaFin.getTime() - ElementosLi[i].fechaInicio.getTime()))
+
+          if ((ElementosLi[i].fechaFin.getTime() - ElementosLi[i].fechaInicio.getTime()) > tareaMasRapida){
+              tareaMasRapida = ElementosLi[i].fechaFin.getTime() - ElementosLi[i].fechaInicio.getTime()
+              idMasRapida = i
+          }
+      }
+  }
+  console.log("fin: " + tareaMasRapida)
+
+  if (tareaMasRapida == 0){
+    document.getElementById("tareaMasRapida").value = "no hay tarea mas rapida"
+  } 
+  else {
+      document.getElementById("tareaMasRapida").value = ElementosLi[idMasRapida].Ingreso
+      document.getElementById("uwu-" + ElementosLi[idMasRapida].id).classList.add("tareaMasRapida")
   }
 }
-
-function AgregarAlArray(Contenido) {
-    var ID=0
-    var NewElement = new Object()
-    NewElement.ID=ID
-    NewElement.Contenido = Contenido
-    NewElement.FechaCreacion = Date.now()
-    NewElement.FechaTerminado = Date.now()
-    NewElement.Terminado = false
-    ElementosLi.push(NewElement)
-    console.log(NewElement.ID)
-    ID++
-  }
-
